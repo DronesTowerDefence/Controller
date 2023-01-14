@@ -23,12 +23,14 @@ namespace Controller
         private const string lightOff = "\x01" + "4" + "\x02" + "0" + "\x03";
         private const string hornOn = "\x01" + "5" + "\x02" + "1" + "\x03";
         private const string hornOff = "\x01" + "5" + "\x02" + "0" + "\x03";
-        private const string left = "\x01" + "2" + "\x02" + "1" + "\x03";
-        private const string right = "\x01" + "2" + "\x02" + "2" + "\x03";
+        private const string bluelightOn = "\x01" + "8" + "\x02" + "1" + "\x03";
+        private const string bluelightOff = "\x01" + "8" + "\x02" + "0" + "\x03";
         private const string neutral = "\x01" + "2" + "\x02" + "0" + "\x03";
+        private const string reset = "\x01" + "0" + "\x02" + "1" + "\x03";
         #endregion;
 
         private bool is_connect = false;
+        private bool set_null = false;
         public MainPage()
         {
             bluetooth = DependencyService.Get<Schnittstellen.IBluetooth>().GetBluetooth();
@@ -68,7 +70,7 @@ namespace Controller
 
                     is_connect = true;
                     //checkConnection.Start();
-                 //   UserDialogs.Instance.Toast("Verbunden mit Gerät 98:D3:31:F6:47:00");
+                    //   UserDialogs.Instance.Toast("Verbunden mit Gerät 98:D3:31:F6:47:00");
 
                 }
                 else
@@ -78,7 +80,7 @@ namespace Controller
 
                     is_connect = false;
                     //checkConnection.Stop();
-                   // UserDialogs.Instance.Toast("Verbindung mit 98:D3:31:F6:47:00 nicht möglich");
+                    //UserDialogs.Instance.Toast("Verbindung mit 98:D3:31:F6:47:00 nicht möglich");
                 }
             }
         }
@@ -92,11 +94,17 @@ namespace Controller
         }
         private void HornBtn_Pressed(object sender, EventArgs e)
         {
-            bluetooth.Write(hornOn);
+            if (!LightSwh.IsToggled)
+            {
+                bluetooth.Write(hornOn);
+            }
         }
         private void HornBtn_Released(object sender, EventArgs e)
         {
-            bluetooth.Write(hornOff);
+            if (!LightSwh.IsToggled)
+            {
+                bluetooth.Write(hornOff);
+            }
         }
         private void LightSwh_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -128,25 +136,43 @@ namespace Controller
 
         }
 
-        private void RightBtn_Pressed(object sender, EventArgs e)
+        private void ResetTbi_Clicked(object sender, EventArgs e)
         {
-            bluetooth.Write(right);
+            bluetooth.Write(reset);
+
         }
 
-        private void RightBtn_Released(object sender, EventArgs e)
+        private void Direction_ValueChanged(object sender, ValueChangedEventArgs e)
+        {
+            if (!set_null)
+            {
+                bluetooth.Write("\x01" + "2" + "\x02" + Convert.ToString(Math.Round(e.NewValue, 0) - Math.Round(e.OldValue, 0)) + "\x03");
+            }
+            else
+            {
+
+                set_null = false;
+            }
+        }
+
+        private void NeutralBtn_Clicked(object sender, EventArgs e)
         {
             bluetooth.Write(neutral);
-
+            set_null = true;
+            Direction.Value = 0;
         }
 
-        private void LeftBtn_Pressed(object sender, EventArgs e)
+        private void BlueLightSwh_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            bluetooth.Write(left);
-        }
+            if (LightSwh.IsToggled)
+            {
+                bluetooth.Write(bluelightOn);
+            }
+            else
+            {
+                bluetooth.Write(bluelightOff);
+            }
 
-        private void LeftBtn_Released(object sender, EventArgs e)
-        {
-            bluetooth.Write(neutral);
         }
     }
 }

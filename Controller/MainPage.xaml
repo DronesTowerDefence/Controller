@@ -5,8 +5,9 @@
              Title="Auto Controller">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem x:Name="ConnectTbi" Text="Verbinden" Clicked="ConnectTbi_Clicked" />
+        <ToolbarItem x:Name="ConnectTbi" Text="Verbinden" Clicked="ConnectTbi_Clicked"  />
         <ToolbarItem x:Name="MointorTbi" Text="Monitor" Clicked="MointorTbi_Clicked" />
+        <ToolbarItem x:Name="ResetTbi" Text="Reset" Clicked="ResetTbi_Clicked" Order="Secondary" />
     </ContentPage.ToolbarItems>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -34,6 +35,9 @@
         <ImageButton x:Name="HornBtn" Grid.Column="1" Grid.Row="4" Pressed="HornBtn_Pressed" Released="HornBtn_Released" Source="horn.png" />
         <Image Source="licht.png" Grid.Row="4" Grid.Column="2" />
         <Switch x:Name="LightSwh"  Grid.Column="3" Grid.Row="4" PropertyChanged="LightSwh_PropertyChanged"/>
+        
+        <Image Source="bluelight.png" Grid.Row="3" Grid.Column="2" />
+        <Switch x:Name="BlueLightSwh"  Grid.Column="3" Grid.Row="3" PropertyChanged="BlueLightSwh_PropertyChanged"/>
 
 
         <Grid Grid.RowSpan="2" Grid.Column="4" Grid.Row="1">
@@ -45,10 +49,10 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-
-            <ImageButton x:Name="RightBtn" Grid.Column="1" Grid.Row="1" Pressed="RightBtn_Pressed"  Released="RightBtn_Released" Source="caretrightsolid.png"/>
-            <ImageButton x:Name="LeftBtn" Grid.Column="0" Grid.Row="1" Pressed="LeftBtn_Pressed" Released="LeftBtn_Released" Source="caretleftsolid.png"/>
+            <Slider Grid.Column="0" Grid.ColumnSpan="3" Minimum="-55" Maximum="55" x:Name="Direction"  ValueChanged="Direction_ValueChanged" />
+            <ImageButton x:Name="NutralBtn" Grid.Column="1" Grid.Row="1" Clicked="NeutralBtn_Clicked" Source="reset.png"/>
 
         </Grid>
 

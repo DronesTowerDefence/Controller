@@ -224,30 +224,38 @@ namespace Controller.Droid
                                         if (input[0] == '\x01')
                                         {
                                             header = input[1] - 48;
+                                            data = "";
+                                            for (int y = 0; input[y + 3] != '\x03'; y++)
+                                            {
+                                                data += input[y + 3];
+                                            }
+                                            velocity = data;
+                                            Console.WriteLine("Geschwindigkeit:" + velocity);
+
+                                            inputData.Add(new Data(data));
+
+                                            switch (header)
+                                            {
+                                                case 3:
+                                                    MainActivity.main.RunOnUiThread(() =>
+                                                    {
+                                                        label.Text = velocity + "km/h";
+                                                    });
+                                                    break;
+                                            }
+
+                                        }
+                                        else
+                                        {
+
                                         }
                                         data = "";
-                                        for (int y = 0; input[y + 3] != '\x03'; y++)
-                                        {
-                                            data += input[y + 3];
-                                        }
-                                        velocity = data;
-
-                                        inputData.Add(new Data(data));
-
-                                        switch (header)
-                                        {
-                                            case 7:
-                                                MainActivity.main.RunOnUiThread(() =>
-                                                {
-                                                    label.Text = velocity + "km/h";
-                                                });
-                                                break;
-                                        }
-
-                                        data = "";
-                                        break;
                                     }
-                                    data += tmp[i];
+                                    else
+                                    {
+                                        data += tmp[i];
+
+                                    }
                                 }
                             }
                         }
