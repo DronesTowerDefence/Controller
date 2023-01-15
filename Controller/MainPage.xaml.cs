@@ -94,17 +94,11 @@ namespace Controller
         }
         private void HornBtn_Pressed(object sender, EventArgs e)
         {
-            if (!LightSwh.IsToggled)
-            {
                 bluetooth.Write(hornOn);
-            }
         }
         private void HornBtn_Released(object sender, EventArgs e)
         {
-            if (!LightSwh.IsToggled)
-            {
                 bluetooth.Write(hornOff);
-            }
         }
         private void LightSwh_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
@@ -164,7 +158,7 @@ namespace Controller
 
         private void BlueLightSwh_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (LightSwh.IsToggled)
+            if (BlueLightSwh.IsToggled)
             {
                 bluetooth.Write(bluelightOn);
             }
